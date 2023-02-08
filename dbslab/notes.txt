@@ -1,0 +1,35 @@
+***********************LAB-1********************
+create table student1(ID varchar(20), name varchar(20), sem numeric(2), cgpa numeric(3,1));
+//numeric(5,2) here precision(total)=5 and decimal is 2
+
+describe student1;
+
+insert into student1 values('1234', 'ABC', 4, 8.7);
+
+//print table
+select * from student1;
+select * from student1 where ID = '1234';
+
+//adding a new row
+insert into student1 values('456', 'ABCDE', 3, 8);
+//deleting a row
+Delete from <tablename> where <condition>;
+
+//adding a new column(adds an attribute)
+alter table student1 add (dept_name varchar(20));
+//deleting a column
+Alter table <tablename> drop column <col>;
+
+//use update to add a null entry or update existing
+update student1 set dept_name = 'CSE' where ID = '1234';
+
+***********************LAB-2********************
+create table student (ID numeric(2), dept_name varchar(10), tot_cred numeric(3));
+
+QUERY-
+A query in a database is a request for information from a database management system (DBMS)
+Users can make a query to retrieve data or change information in a database, such as adding or removing data.
+
+
+
+
