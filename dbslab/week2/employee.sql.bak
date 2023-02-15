@@ -1,0 +1,301 @@
+
+SQL*Plus: Release 12.1.0.2.0 Production on Wed Feb 8 14:27:15 2023
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Enter user-name: d16@cgorcl
+Enter password:
+Last Successful login time: Wed Feb 08 2023 14:05:05 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+
+SQL> create table Employee(
+  2  EmpNo numeric(4) PRIMARY KEY,
+  3  EmpName varchar(10) NOT NULL,
+  4  Gender varchar(6) NOT NULL,
+  5  Salary numeric(6) NOT NULL,
+  6  Address varchar(10) NOT NULL,
+  7  DNo numeric(4),
+  8  CHECK(Gender in('M','F'))
+  9  );
+
+Table created.
+
+SQL> describe Employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(4)
+ EMPNAME                                   NOT NULL VARCHAR2(10)
+ GENDER                                    NOT NULL VARCHAR2(6)
+ SALARY                                    NOT NULL NUMBER(6)
+ ADDRESS                                   NOT NULL VARCHAR2(10)
+ DNO                                                NUMBER(4)
+
+SQL> create table Department((DeptNo, DeptName, Location))
+  2  ;
+create table Department((DeptNo, DeptName, Location))
+                        *
+ERROR at line 1:
+ORA-00904: : invalid identifier
+
+
+SQL> create table EDepartment(DeptNo numeric(4) PRIMARY KEY, DeptName varchar(10) UNIQUE, Location varchar(10));
+
+Table created.
+
+SQL> desbribe EDepartment;
+SP2-0734: unknown command beginning "desbribe E..." - rest of line ignored.
+SQL> describe EDepartment;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNO                                    NOT NULL NUMBER(4)
+ DEPTNAME                                           VARCHAR2(10)
+ LOCATION                                           VARCHAR2(10)
+
+SQL> alter table Employee add constraint employee_fk foreign key(DNo) references EDepartment(DeptNo);
+
+Table altered.
+
+SQL> desbribe EDepartment;
+SP2-0734: unknown command beginning "desbribe E..." - rest of line ignored.
+SQL> describe Employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(4)
+ EMPNAME                                   NOT NULL VARCHAR2(10)
+ GENDER                                    NOT NULL VARCHAR2(6)
+ SALARY                                    NOT NULL NUMBER(6)
+ ADDRESS                                   NOT NULL VARCHAR2(10)
+ DNO                                                NUMBER(4)
+
+SQL> insert into Employee values(1, "jay", "m", 20000, "Ahmedabad", 2253);
+insert into Employee values(1, "jay", "m", 20000, "Ahmedabad", 2253)
+                                                  *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into Employee values(1, "jay", "m", 20000, "Ahmedabad", 2253);
+insert into Employee values(1, "jay", "m", 20000, "Ahmedabad", 2253)
+                                                  *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into Employee values(1, "jay", "m", 20000, 'Ahmedabad', 2253);
+insert into Employee values(1, "jay", "m", 20000, 'Ahmedabad', 2253)
+                                      *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253);
+insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253)
+*
+ERROR at line 1:
+ORA-02290: check constraint (D16.SYS_C0014576) violated
+
+
+SQL> insert into Employee values(1234, 'jay', 'm', 20000, 'Ahmedabad', 2253);
+insert into Employee values(1234, 'jay', 'm', 20000, 'Ahmedabad', 2253)
+*
+ERROR at line 1:
+ORA-02290: check constraint (D16.SYS_C0014576) violated
+
+
+SQL> insert into Department values(2253, "CSE", "AB5");
+insert into Department values(2253, "CSE", "AB5")
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> insert into EDepartment values(2253, "CSE", "AB5");
+insert into EDepartment values(2253, "CSE", "AB5")
+                                            *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into EDepartment values(2253, 'CSE', 'AB5');
+
+1 row created.
+
+SQL> select * from EDepartment;
+
+    DEPTNO DEPTNAME   LOCATION
+---------- ---------- ----------
+      2253 CSE        AB5
+
+SQL> insert into EDepartment values(2211, 'EEE', 'AB2');
+
+1 row created.
+
+SQL> insert into EDepartment values(2781, 'ECE', 'AB5');
+
+1 row created.
+
+SQL> insert into EDepartment values(1581, 'CCE', 'AB3');
+
+1 row created.
+
+SQL> select * from EDepartment;
+
+    DEPTNO DEPTNAME   LOCATION
+---------- ---------- ----------
+      2253 CSE        AB5
+      2211 EEE        AB2
+      2781 ECE        AB5
+      1581 CCE        AB3
+
+SQL> insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253);
+insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253)
+*
+ERROR at line 1:
+ORA-02290: check constraint (D16.SYS_C0014576) violated
+
+
+SQL> insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad');
+insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad')
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+SQL> insert into Employee values(1, 'jay', m, 20000, 'Ahmedabad', 2253);
+insert into Employee values(1, 'jay', m, 20000, 'Ahmedabad', 2253)
+                                      *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253);
+insert into Employee values(1, 'jay', 'm', 20000, 'Ahmedabad', 2253)
+*
+ERROR at line 1:
+ORA-02290: check constraint (D16.SYS_C0014576) violated
+
+
+SQL> insert into Employee values(1, 'jay', 'M', 20000, 'Ahmedabad', 2253);
+
+1 row created.
+
+SQL> insert into Employee values(1, 'manush', 'M', 30000, 'Ahmedabad', 2211);
+insert into Employee values(1, 'manush', 'M', 30000, 'Ahmedabad', 2211)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (D16.SYS_C0014577) violated
+
+
+SQL> insert into Employee values(23, 'manush', 'M', 30000, 'Ahmedabad', 2211);
+
+1 row created.
+
+SQL> insert into Employee values(17, 'akarsh', 'M', 20000, 'Ranchi', 2781);
+
+1 row created.
+
+SQL> insert into Employee values(17, 'yuvraj', 'F', 10000, 'Kolkata', 2253);
+insert into Employee values(17, 'yuvraj', 'F', 10000, 'Kolkata', 2253)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (D16.SYS_C0014577) violated
+
+
+SQL> insert into Employee values(35, 'yuvraj', 'F', 10000, 'Kolkata', 2253);
+
+1 row created.
+
+SQL> select * from Employee;
+
+     EMPNO EMPNAME    GENDER     SALARY ADDRESS           DNO
+---------- ---------- ------ ---------- ---------- ----------
+         1 jay        M           20000 Ahmedabad        2253
+        23 manush     M           30000 Ahmedabad        2211
+        17 akarsh     M           20000 Ranchi           2781
+        35 yuvraj     F           10000 Kolkata          2253
+
+SQL> delete from EDepartment where deptno=2211;
+delete from EDepartment where deptno=2211
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (D16.EMPLOYEE_FK) violated - child record found
+
+
+SQL> drop table EDepartment;
+drop table EDepartment
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys
+
+
+SQL> insert into Employee values(17, 'yuvraj', 'o', 10000, 'Kolkata', 2253);
+insert into Employee values(17, 'yuvraj', 'o', 10000, 'Kolkata', 2253)
+*
+ERROR at line 1:
+ORA-02290: check constraint (D16.SYS_C0014576) violated
+
+
+SQL> Alter table Employees modify constraint employee_fk foreign key(DNo) references EDepartment(DeptNo) on delete cascade;
+Alter table Employees modify constraint employee_fk foreign key(DNo) references EDepartment(DeptNo) on delete cascade
+                                                    *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> alter table Employee drop constraint employee_fk;
+
+Table altered.
+
+SQL> Alter table Employee add constraint employee_fk foreign key(DNo) references EDepartment(DeptNo) ON DELETE CASCADE;
+
+Table altered.
+
+SQL> select * from EDepartment;
+
+    DEPTNO DEPTNAME   LOCATION
+---------- ---------- ----------
+      2253 CSE        AB5
+      2211 EEE        AB2
+      2781 ECE        AB5
+      1581 CCE        AB3
+
+SQL> delete from EDepartment where DeptNo=2211;
+
+1 row deleted.
+
+SQL> select * from EDepartment;
+
+    DEPTNO DEPTNAME   LOCATION
+---------- ---------- ----------
+      2253 CSE        AB5
+      2781 ECE        AB5
+      1581 CCE        AB3
+
+SQL> select * from Employee;
+
+     EMPNO EMPNAME    GENDER     SALARY ADDRESS           DNO
+---------- ---------- ------ ---------- ---------- ----------
+         1 jay        M           20000 Ahmedabad        2253
+        17 akarsh     M           20000 Ranchi           2781
+        35 yuvraj     F           10000 Kolkata          2253
+
+SQL> alter table Employee modify salary default 10000;
+
+Table altered.
+
+SQL> insert into EMPLOYEE(empno,empname,gender,address,dno) values(8,'Ruth','M','Manipal','2253');
+
+1 row created.
+
+SQL> select * from Employee;
+
+     EMPNO EMPNAME    GENDER     SALARY ADDRESS           DNO
+---------- ---------- ------ ---------- ---------- ----------
+         1 jay        M           20000 Ahmedabad        2253
+        17 akarsh     M           20000 Ranchi           2781
+        35 yuvraj     F           10000 Kolkata          2253
+         8 Ruth       M           10000 Manipal          2253
+
+
