@@ -1,0 +1,27 @@
+/*SET SERVEROUTPUT ON
+
+DECLARE
+    CURSOR C IS SELECT * FROM (SELECT * FROM student ORDER BY tot_cred) WHERE ROWNUM < 11;
+BEGIN
+    FOR I IN C
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('ID: ' || I.ID || ' Name: ' || I.name || ' Dept_name: ' || I.dept_name || ' Total credits: ' || I.tot_cred);
+    END LOOP;
+END;
+/
+*/
+
+set serveroutput on
+DECLARE
+	CURSOR C IS select * from student order by tot_cred;
+	stud student%ROWTYPE;
+BEGIN
+	OPEN c;
+	LOOP
+		FETCH c into stud;
+		dbms_output.put_line('ID: '||stud.ID||'Name: '||stud.name);
+		Exit WHEN c%Rowcount > 10;
+	END LOOP;
+	close c;
+End;
+/
