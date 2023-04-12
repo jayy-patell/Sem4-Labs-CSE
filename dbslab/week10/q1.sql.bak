@@ -1,0 +1,14 @@
+-- 1. Write a procedure to display a message “Good Day to You”. --
+
+SET SERVEROUTPUT ON
+
+CREATE OR REPLACE PROCEDURE disp IS
+BEGIN 
+    DBMS_OUTPUT.PUT_LINE('Good day to you.');
+END;
+/
+
+BEGIN
+    disp;
+END;
+/
