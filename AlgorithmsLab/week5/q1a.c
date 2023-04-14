@@ -98,7 +98,6 @@ void topoSourceRem(Graph * g, int * removed, int * ind) {
     removed[*ind] = j;
     *ind = *ind + 1;
     printf("%d ", j);
-
 }
 
 void main() {

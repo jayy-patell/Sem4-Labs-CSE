@@ -26,6 +26,7 @@ int main(){
     char text[20]; 
     printf("Enter a string: ");
     scanf("%[^\n]%*c", text);
+    // gets(text);
     // for(int i=0; i<20; i++){
     //     scanf("%c", pattern[i]);
     // }
