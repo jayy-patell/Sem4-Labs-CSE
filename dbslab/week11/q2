@@ -1,0 +1,26 @@
+CREATE TABLE Old_Data_Inst (
+     ID VARCHAR(5),
+     name VARCHAR(20),
+     dept_name VARCHAR(20),
+     salary NUMERIC(8,2),
+     PRIMARY KEY (ID));
+
+     
+create or replace trigger old_data_inst
+Before update on instructor
+for each row
+begin
+    insert into old_data_inst values (:old.id,:old.name,:old.dept_name,:old.salary);
+end;
+/
+
+
+SQL> update instructor set salary = 91000 where name = 'Katz';
+
+1 row updated.
+
+SQL> select * from Old_Data_Inst;
+
+ID    NAME                 DEPT_NAME                SALARY
+----- -------------------- -------------------- ----------
+45565 Katz                 Comp. Sci.                75000

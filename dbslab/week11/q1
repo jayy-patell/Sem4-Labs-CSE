@@ -1,0 +1,57 @@
+CREATE TABLE log_change_Takes(
+      Time_Of_Change DATE,
+      ID VARCHAR(5),
+      course_id VARCHAR(8),
+      sec_id VARCHAR(8),
+      semester VARCHAR(6),
+      year NUMERIC(4,0),
+      grade VARCHAR(2),
+      PRIMARY KEY (ID, course_id, sec_id, semester, year));
+
+
+CREATE or REPLACE trigger log_change_Takes
+BEFORE INSERT OR UPDATE
+OR DELETE on takes
+FOR EACH ROW
+begin
+	case
+        WHEN INSERTING THEN
+        insert into log_change_Takes values (current_date,:NEW.id,:NEW.course_id,:NEW.sec_id,:NEW.semester,:NEW.year,:NEW.grade);
+         WHEN DELETING THEN
+         insert into log_change_Takes values (current_date,:OLD.id,:OLD.course_id,:OLD.sec_id,:OLD.semester,:OLD.year,:OLD.grade);
+         WHEN UPDATING THEN
+         insert into log_change_Takes values (current_date,:NEW.id,:NEW.course_id,:NEW.sec_id,:NEW.semester,:NEW.year,:NEW.grade);
+    end case;
+end;
+/
+
+Trigger created.
+
+SQL> SELECT * FROM takes WHERE ID = 54321 AND sec_id = 2;
+
+ID    COURSE_I SEC_ID   SEMEST       YEAR GR
+----- -------- -------- ------ ---------- --
+54321 CS-190   2        Spring       2009 B+
+
+SQL> UPDATE takes SET sec_id = 1 WHERE ID = 54321 AND sec_id = 2;
+
+1 row updated.
+
+SQL> select* from log_change_Takes;
+
+TIME_OF_C ID    COURSE_I SEC_ID   SEMEST       YEAR GR
+--------- ----- -------- -------- ------ ---------- --
+26-APR-23 54321 CS-190   1        Spring       2009 B+
+
+SQL> SELECT * FROM takes WHERE ID = 54321 AND sec_id = 1;
+
+ID    COURSE_I SEC_ID   SEMEST       YEAR GR
+----- -------- -------- ------ ---------- --
+54321 CS-101   1        Fall         2009 A-
+54321 CS-190   1        Spring       2009 B+
+
+SQL> SELECT * FROM log_change_Takes;
+
+TIME_OF_C ID    COURSE_I SEC_ID   SEMEST       YEAR GR
+--------- ----- -------- -------- ------ ---------- --
+21-APR-23 54321 CS-190   1        Spring       2009 B+
